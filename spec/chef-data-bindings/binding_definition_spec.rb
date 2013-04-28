@@ -58,7 +58,7 @@ describe ChefDataBindings, "data binding definition API" do
 
     it "raises a not-enraging error message when an intermediate value is nil" do
       recipe.define(:oops).as_attribute(:ec2, :no_attr_here, :derp)
-      error_class = ChefDataBindings::BindTypes::AttributePath::MissingNodeAttribute
+      error_class = ChefDataBindings::MissingNodeAttribute
       error_message = "Error finding value `oops' from attributes `node[:ec2][:no_attr_here][:derp]`: `node[:ec2][:no_attr_here]` is nil"
       lambda { recipe.oops }.should raise_error(error_class, error_message)
     end

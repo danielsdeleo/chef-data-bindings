@@ -26,9 +26,6 @@ module ChefDataBindings
 
       attr_reader :name
 
-      class MissingNodeAttribute < StandardError
-      end
-
       def initialize(name, *path_specs)
         @name = name
         @path_specs = path_specs
