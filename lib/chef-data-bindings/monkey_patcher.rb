@@ -48,7 +48,7 @@ module ChefDataBindings
       end
     end
 
-    def self.install_data_bindings
+    def self.install_monkey_patches
       Chef::Recipe.send(:include, ChefDataBindings::Definition)
       Chef::RunContext.send(:include, RunContextPatch)
       Chef::CookbookVersion.send(:include, CookbookVersionPatch)
