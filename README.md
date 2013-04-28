@@ -44,6 +44,14 @@ _not implemented yet_ (but can be done with lambdas)
 
 _not implemented yet_ (but can be done with lambdas)
 
+### Reading Values
+
+_API in progress..._
+
+### Overriding Values
+
+_API in progress..._
+
 ## Motivation
 
 This proposal combines a handful of ideas I've been gnawing on for a few
