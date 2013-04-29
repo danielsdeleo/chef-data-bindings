@@ -60,6 +60,15 @@ template config_file_path do
 end
 ```
 
+The above is equivalent to:
+
+```ruby
+template "/etc/app.conf" do
+  owner "app_user"
+end
+```
+
+
 ### Overriding Values
 
 _API in progress..._
