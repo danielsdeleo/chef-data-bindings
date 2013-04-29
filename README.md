@@ -46,7 +46,19 @@ _not implemented yet_ (but can be done with lambdas)
 
 ### Reading Values
 
-_API in progress..._
+Under the hood, data bindings are just ruby methods, so you call them
+like any other method:
+
+```ruby
+define(:config_file_path).as("/etc/app.conf")
+define(:config_file_owner).as("app_user")
+
+# Usage in recipe context:
+template config_file_path do
+  # usage in resource context
+  owner config_file_owner
+end
+```
 
 ### Overriding Values
 
