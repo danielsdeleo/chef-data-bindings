@@ -48,10 +48,39 @@ module ChefDataBindings
       end
     end
 
+    module ResourcePatch
+      def self.install_patch
+        if Chef::Resource.instance_methods(false).include?(:params=)
+          Chef::Resource.send(:remove_method, :params=)
+        end
+        Chef::Resource.send(:include, self)
+      end
+
+      def params=(new_params)
+        if data_bindings = new_params[:bindings]
+          global_context   = data_bindings[:global]
+          local_context    = data_bindings[:local]
+          override_context = data_bindings[:override]
+
+          extend global_context if global_context
+          extend local_context
+          extend override_context if override_context
+        end
+
+        @params = new_params
+        @params
+      end
+
+      def binding_context
+        self
+      end
+    end
+
     def self.install_monkey_patches
       Chef::Recipe.send(:include, ChefDataBindings::Definition)
       Chef::RunContext.send(:include, RunContextPatch)
       Chef::CookbookVersion.send(:include, CookbookVersionPatch)
+      ResourcePatch.install_patch
     end
   end
 end

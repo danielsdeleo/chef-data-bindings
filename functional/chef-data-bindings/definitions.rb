@@ -36,6 +36,10 @@ describe "Data definitions in recipes" do
   end
 
   it "defines a static value in recipe scope and reads it in resource scope" do
-    pending
+    run_chef("init-data-bindings::init", "static-value::resource-scope")
+    message = TestMessages.read[1]
+
+    expect(message[0]).to eql(:resource_scope)
+    expect(message[1]).to eql("expected result")
   end
 end

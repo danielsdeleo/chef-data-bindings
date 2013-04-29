@@ -83,6 +83,12 @@ module ChefDataBindings
       extend global_context if global_context
       extend @local_context
       extend override_context if override_context
+
+      # this is also unfortunate. We use an otherwise useless object
+      # passed in to Chef::Resource objects when created to add our
+      # binding contexts to resources
+      @params = {:bindings => {:global => @global_context, :local => @local_context, :override => @override_context}}
+
       self
     end
 
