@@ -15,31 +15,47 @@ describe "Data definitions in recipes" do
     Chef::Config[:solo] = true
     Chef::Config[:cookbook_path] = File.expand_path("../../fixtures", __FILE__)
     Chef::Config[:client_fork] = false
+
     client = Chef::Client.new({"run_list" => run_list})
     client.run
     client
   end
 
-  it "Adds the data binding definition API to recipes" do
-    run_chef("init-data-bindings::init")
-    message = TestMessages.read[0]
-    expect(message[0]).to eql(:recipe_methods)
-    expect(message[1]).to include(:define)
+  describe "when using definitions within the same recipe" do
+
+    it "Adds the data binding definition API to recipes" do
+      run_chef("init-data-bindings::init")
+      message = TestMessages.read[0]
+      expect(message[0]).to eql(:recipe_methods)
+      expect(message[1]).to include(:define)
+    end
+
+    it "defines a static value in recipe scope" do
+      run_chef("init-data-bindings::init", "static-value::recipe-scope")
+      message = TestMessages.read[1]
+
+      expect(message[0]).to eql(:binding_call)
+      expect(message[1]).to eql("expected result")
+    end
+
+    it "defines a static value in recipe scope and reads it in resource scope" do
+      run_chef("init-data-bindings::init", "static-value::resource-scope")
+      message = TestMessages.read[1]
+
+      expect(message[0]).to eql(:resource_scope)
+      expect(message[1]).to eql("expected result")
+    end
   end
 
-  it "defines a static value in recipe scope" do
-    run_chef("init-data-bindings::init", "static-value::recipe-scope")
-    message = TestMessages.read[1]
+  describe "when overriding definitions in recipes" do
 
-    expect(message[0]).to eql(:binding_call)
-    expect(message[1]).to eql("expected result")
-  end
+    it "prefers the override value to the one defined in the included recipe" do
+      run_chef("overrides::overrider")
+      message = TestMessages.read[0]
 
-  it "defines a static value in recipe scope and reads it in resource scope" do
-    run_chef("init-data-bindings::init", "static-value::resource-scope")
-    message = TestMessages.read[1]
+      expect(message[0]).to eql(:override_test)
+      expect(message[1]).to eql("overrider")
+    end
 
-    expect(message[0]).to eql(:resource_scope)
-    expect(message[1]).to eql("expected result")
   end
 end
