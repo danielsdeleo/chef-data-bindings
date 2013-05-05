@@ -71,7 +71,31 @@ end
 
 ### Overriding Values
 
-_API in progress..._
+Given a recipe with a data binding, you can override it by calling
+`include_customized_recipe` with a block defining the overrides. For
+example, a recipe like this:
+
+```ruby
+# cookbooks/example/recipes/default_value.rb
+define(:bound_value).as("default value")
+
+puts bound_value
+```
+Running this recipe will print "default value" to the screen.
+
+To change the data binding:
+
+```ruby
+# cookbooks/example/recipes/change_binding.rb
+include_customized_recipe("example::default_value") do |customize|
+  customize.define(:bound_value).as("customized binding value")
+end
+```
+
+With this customization in place, running the "change_binding" recipe
+will change the binding of `bound_value` and print "customized binding
+value" to the screen.
+
 
 ## Motivation
 
